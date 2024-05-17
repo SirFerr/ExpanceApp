@@ -1,28 +1,29 @@
 package com.example.expanceapp.mainGroup.mainScreen
 
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
 import androidx.compose.foundation.lazy.staggeredgrid.items
-import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.Card
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Button
+import androidx.compose.material3.Card
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -70,7 +71,13 @@ fun MainScreen(
             verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.main_padding))
         ) {
             val expanses = listOf(
-                Expanse(id = 1, name = "Food", description = "Lunch", type = "Food", value = 30),
+                Expanse(
+                    id = 1,
+                    name = "Food",
+                    description = "Lunch",
+                    type = "Food",
+                    value = 300
+                ),
                 Expanse(
                     id = 2,
                     name = "Bus",
@@ -141,8 +148,12 @@ fun MainScreen(
             var value by remember {
                 mutableStateOf("")
             }
-            var type by remember {
+            var expanseType by remember {
                 mutableStateOf("")
+            }
+            var expanseTypes = ExpanseType.getAllTypes()
+            var isExpanded by remember {
+                mutableStateOf(false)
             }
             AlertDialog(
                 onDismissRequest = { },
@@ -161,7 +172,7 @@ fun MainScreen(
                     }
                 },
                 text = {
-                    Column {
+                    Column(verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.main_padding))) {
                         OutlinedTextField(value = name, onValueChange = { name = it }, label = {
                             Text(
                                 text = "Name"
@@ -180,11 +191,24 @@ fun MainScreen(
                                 text = "Value"
                             )
                         })
-                        OutlinedTextField(value = type, onValueChange = { type = it }, label = {
-                            Text(
-                                text = "Type"
-                            )
-                        })
+
+                        Button(modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(
+                            dimensionResource(id = R.dimen.rounded_corner)
+                        ), onClick = { isExpanded = true }) {
+                            Text(text = "Type" + if (expanseType != "") " $expanseType expanses" else "")
+                        }
+                        DropdownMenu(
+                            expanded = isExpanded, onDismissRequest = {
+                                isExpanded = false
+                            }) {
+                            expanseTypes.forEach {
+                                DropdownMenuItem(text = { Text(text = it.displayName) },
+                                    onClick = {
+                                        isExpanded = false
+                                        expanseType = it.displayName
+                                    })
+                            }
+                        }
                     }
                 })
         }

@@ -53,6 +53,7 @@ fun SignUpScreen(
             verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.main_padding))
 
         )
+
         {
             val context = LocalContext.current
             customTextField(
