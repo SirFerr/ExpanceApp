@@ -1,4 +1,4 @@
-package com.example.expanceapp.view.loginGroup
+package com.example.expanceapp.loginGroup
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.OutlinedTextField

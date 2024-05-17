@@ -1,4 +1,4 @@
-package com.example.expanceapp.view.loginGroup.loginScreen
+package com.example.expanceapp.loginGroup.loginScreen
 
 import androidx.lifecycle.ViewModel
 import com.example.expanceapp.data.local.TokenSharedPreferencesManager

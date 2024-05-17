@@ -1,4 +1,4 @@
-package com.example.expanceapp.view.loginGroup.signUpScreen
+package com.example.expanceapp.loginGroup.signUpScreen
 
 import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
@@ -22,7 +22,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.example.expanceapp.R
-import com.example.expanceapp.view.loginGroup.customTextField
+import com.example.expanceapp.loginGroup.customTextField
 
 
 @OptIn(ExperimentalMaterial3Api::class)

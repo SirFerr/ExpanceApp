@@ -1,4 +1,4 @@
-package com.example.expanceapp.view
+package com.example.expanceapp
 
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
@@ -17,11 +17,11 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navigation
 import com.example.expanceapp.scaffold.scaffold
 import com.example.expanceapp.utils.Destinations
-import com.example.expanceapp.view.loginGroup.loginScreen.LogInScreen
-import com.example.expanceapp.view.loginGroup.signUpScreen.SignUpScreen
-import com.example.expanceapp.view.mainGroup.accountScreen.AccountScreen
-import com.example.expanceapp.view.mainGroup.mainScreen.MainScreen
-import com.example.expanceapp.view.mainGroup.searchScreen.SearchScreen
+import com.example.expanceapp.loginGroup.loginScreen.LogInScreen
+import com.example.expanceapp.loginGroup.signUpScreen.SignUpScreen
+import com.example.expanceapp.mainGroup.accountScreen.AccountScreen
+import com.example.expanceapp.mainGroup.mainScreen.MainScreen
+import com.example.expanceapp.mainGroup.searchScreen.SearchScreen
 
 @Composable
 fun Navigation(): NavHostController {
@@ -50,8 +50,12 @@ fun Navigation(): NavHostController {
                     enterTransition = { fadeIn(animationSpec = tween(duration)) },
                     exitTransition = { fadeOut(animationSpec = tween(duration)) }
                 ) {
-                    composable(Destinations.main) { MainScreen(navController) }
-                    composable(Destinations.search) { SearchScreen(navController) }
+                    composable(Destinations.main) {
+                        MainScreen(navController)
+                    }
+                    composable(Destinations.search) {
+                        SearchScreen(navController)
+                    }
                     composable(Destinations.account) {
                         AccountScreen(
                             navController,

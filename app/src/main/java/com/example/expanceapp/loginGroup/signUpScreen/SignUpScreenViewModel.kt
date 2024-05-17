@@ -1,4 +1,4 @@
-package com.example.expanceapp.view.loginGroup.signUpScreen
+package com.example.expanceapp.loginGroup.signUpScreen
 
 import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
