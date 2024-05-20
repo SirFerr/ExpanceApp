@@ -1,5 +1,6 @@
 package com.example.expanceapp.di
 
+import com.example.expanceapp.data.local.TokenSharedPreferencesManager
 import com.example.expanceapp.data.remote.ExpanseAppApi
 import com.example.expanceapp.utils.Constants.BASE_URL
 import dagger.Module
@@ -18,14 +19,16 @@ import javax.inject.Singleton
 object NetworkModule {
     @Singleton
     @Provides
-    fun provideExpanseApi(): ExpanseAppApi {
+    fun provideExpanseAppApi(tokenSharedPreferencesManager: TokenSharedPreferencesManager): ExpanseAppApi {
+
+        val authInterceptor = AuthInterceptor(tokenSharedPreferencesManager)
 
         val client = OkHttpClient.Builder()
-            // Configure timeouts and other settings as needed
+            .addInterceptor(authInterceptor)
             .connectTimeout(5, TimeUnit.SECONDS)
             .readTimeout(5, TimeUnit.SECONDS)
             .writeTimeout(5, TimeUnit.SECONDS)
-            .retryOnConnectionFailure(true) // Enable retry on connection failure
+            .retryOnConnectionFailure(true)
             .build()
 
         return Retrofit.Builder()

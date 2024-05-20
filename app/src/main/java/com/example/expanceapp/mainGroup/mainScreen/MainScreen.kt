@@ -1,5 +1,6 @@
 package com.example.expanceapp.mainGroup.mainScreen
 
+import android.util.Log
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -36,13 +37,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
-import com.example.expanceapp.R
 import com.example.expanceapp.data.remote.Expanse
-import com.example.expanceapp.utils.ExpanseType
+import com.example.expanceapp.utils.Destinations
 
 @OptIn(ExperimentalMaterialApi::class)
 
@@ -51,166 +50,160 @@ fun MainScreen(
     navController: NavHostController,
     viewModel: MainScreenViewModel = hiltViewModel()
 ) {
-
     val isAdd by viewModel.isAdd.collectAsState()
     val isOpenedTypes by viewModel.isOpenedTypes.collectAsState()
+    val pieChartData by viewModel.pieChartData.collectAsState()
 
-    Scaffold(modifier = Modifier.fillMaxSize(), floatingActionButton = {
-        FloatingActionButton(onClick = { viewModel.changeIsAdd() }) {
-            Icon(imageVector = Icons.Filled.Add, contentDescription = null)
+    Scaffold(
+        modifier = Modifier.fillMaxSize(),
+        floatingActionButton = {
+            FloatingActionButton(onClick = { viewModel.changeIsAdd() }) {
+                Icon(imageVector = Icons.Filled.Add, contentDescription = null)
+            }
         }
-
-    }) { it ->
+    ) { it ->
         it
-
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(dimensionResource(id = R.dimen.main_padding)),
+                .padding(16.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.main_padding))
+            verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            val expanses = listOf(
-                Expanse(
-                    id = 1,
-                    name = "Food",
-                    description = "Lunch",
-                    type = "Food",
-                    value = 300
-                ),
-                Expanse(
-                    id = 2,
-                    name = "Bus",
-                    description = "Transport",
-                    type = "Transport",
-                    value = 20
-                ),
-                Expanse(
-                    id = 3,
-                    name = "Movie",
-                    description = "Cinema",
-                    type = "Entertainment",
-                    value = 10
-                ),
-                Expanse(
-                    id = 4,
-                    name = "Groceries",
-                    description = "Shopping",
-                    type = "Clothes",
-                    value = 40
-                )
-            )
-
-            val pieChartData = mapExpanseToPieChartData(expanses)
-
-            PieChart(
-                data = pieChartData,
-                modifier = Modifier
-                    .size(200.dp)
-                    .fillMaxSize()
-                    .clickable {
-                        viewModel.changeIsOpenedTypes()
-                    }
-            )
-            if (isOpenedTypes)
-                LazyVerticalStaggeredGrid(
-                    columns = StaggeredGridCells.Fixed(3),
-                    horizontalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.main_padding)),
-                    verticalItemSpacing = dimensionResource(id = R.dimen.main_padding)
-                ) {
-                    items(ExpanseType.getAllTypes()) {
-                        Card(
-                            modifier = Modifier
-                                .wrapContentSize(),
-                            border = BorderStroke(1.dp, it.color),
-                        ) {
-                            Row(
-                                modifier = Modifier.padding(dimensionResource(id = R.dimen.main_padding)),
-                                verticalAlignment = Alignment.CenterVertically,
-                                horizontalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.main_padding))
-                            ) {
-                                Text(text = it.displayName)
-                            }
-                        }
-
-                    }
-                }
-
+            PieChartSection(pieChartData, viewModel::changeIsOpenedTypes)
+            if (isOpenedTypes) {
+                ExpenseTypesSection(pieChartData, navController)
+            }
         }
 
         if (isAdd) {
-            var name by remember {
-                mutableStateOf("")
-            }
-            var description by remember {
-                mutableStateOf("")
-            }
-            var value by remember {
-                mutableStateOf("")
-            }
-            var expanseType by remember {
-                mutableStateOf("")
-            }
-            var expanseTypes = ExpanseType.getAllTypes()
-            var isExpanded by remember {
-                mutableStateOf(false)
-            }
-            AlertDialog(
-                onDismissRequest = { },
-                dismissButton = {
-                    TextButton(onClick = {
-                        viewModel.changeIsAdd()
-                    }) {
-                        Text(text = "dismiss")
-                    }
-                },
-                confirmButton = {
-                    TextButton(onClick = {
-                        viewModel.changeIsAdd()
-                    }) {
-                        Text(text = "confirm")
-                    }
-                },
-                text = {
-                    Column(verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.main_padding))) {
-                        OutlinedTextField(value = name, onValueChange = { name = it }, label = {
-                            Text(
-                                text = "Name"
-                            )
-                        })
-                        OutlinedTextField(
-                            value = description,
-                            onValueChange = { description = it },
-                            label = {
-                                Text(
-                                    text = "Description"
-                                )
-                            })
-                        OutlinedTextField(value = value, onValueChange = { value = it }, label = {
-                            Text(
-                                text = "Value"
-                            )
-                        })
-
-                        Button(modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(
-                            dimensionResource(id = R.dimen.rounded_corner)
-                        ), onClick = { isExpanded = true }) {
-                            Text(text = "Type" + if (expanseType != "") " $expanseType expanses" else "")
-                        }
-                        DropdownMenu(
-                            expanded = isExpanded, onDismissRequest = {
-                                isExpanded = false
-                            }) {
-                            expanseTypes.forEach {
-                                DropdownMenuItem(text = { Text(text = it.displayName) },
-                                    onClick = {
-                                        isExpanded = false
-                                        expanseType = it.displayName
-                                    })
-                            }
-                        }
-                    }
-                })
+            AddExpenseDialog(
+                viewModel::changeIsAdd,
+                viewModel.expanseType.collectAsState().value,
+                viewModel
+            )
         }
     }
+}
+
+@Composable
+fun PieChartSection(
+    pieChartData: List<PieChartData>,
+    onChartClick: () -> Unit
+) {
+    PieChart(
+        data = pieChartData,
+        modifier = Modifier
+            .size(200.dp)
+            .fillMaxSize()
+            .clickable { onChartClick() }
+    )
+}
+
+@Composable
+fun ExpenseTypesSection(pieChartData: List<PieChartData>, navController: NavHostController) {
+    LazyVerticalStaggeredGrid(
+        columns = StaggeredGridCells.Fixed(3),
+        horizontalArrangement = Arrangement.spacedBy(16.dp),
+        verticalItemSpacing = 16.dp
+    ) {
+        items(pieChartData) { data ->
+            Card(
+                modifier = Modifier
+                    .wrapContentSize()
+                    .clickable {
+
+                        Log.d("click", data.name)
+                        navController.navigate(Destinations.detailExpansesByType + "/${data.name}")
+                    },
+                border = BorderStroke(1.dp, data.color),
+            ) {
+                Row(
+                    modifier = Modifier.padding(16.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(16.dp)
+                ) {
+                    Text(text = data.name)
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun AddExpenseDialog(
+    onDismiss: () -> Unit,
+    expanseTypes: List<String>,
+    viewModel: MainScreenViewModel
+) {
+    var name by remember { mutableStateOf("") }
+    var description by remember { mutableStateOf("") }
+    var value by remember { mutableStateOf("") }
+    var expanseTypeSelected by remember { mutableStateOf("") }
+    var isExpanded by remember { mutableStateOf(false) }
+
+    AlertDialog(
+        title = { Text(text = "Add new expanse") },
+        onDismissRequest = { onDismiss() },
+        dismissButton = {
+            TextButton(onClick = { onDismiss() }) {
+                Text(text = "Dismiss")
+            }
+        },
+        confirmButton = {
+            TextButton(onClick = {
+                onDismiss()
+                viewModel.createExpanse(
+                    Expanse(
+                        name = name,
+                        description = description,
+                        value = value.toInt(),
+                        type = expanseTypeSelected
+                    )
+                )
+            }) {
+                Text(text = "Confirm")
+            }
+        },
+        text = {
+            Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
+                OutlinedTextField(
+                    value = name,
+                    onValueChange = { name = it },
+                    label = { Text(text = "Name") }
+                )
+                OutlinedTextField(
+                    value = description,
+                    onValueChange = { description = it },
+                    label = { Text(text = "Description") }
+                )
+                OutlinedTextField(
+                    value = value,
+                    onValueChange = { value = it },
+                    label = { Text(text = "Value") }
+                )
+                Button(
+                    modifier = Modifier.fillMaxWidth(),
+                    shape = RoundedCornerShape(16.dp),
+                    onClick = { isExpanded = true }
+                ) {
+                    Text(text = if (expanseTypeSelected.isNotEmpty()) expanseTypeSelected else "Select type")
+                }
+                DropdownMenu(
+                    expanded = isExpanded,
+                    onDismissRequest = { isExpanded = false }
+                ) {
+                    expanseTypes.forEach { type ->
+                        DropdownMenuItem(
+                            text = { Text(text = type) },
+                            onClick = {
+                                expanseTypeSelected = type
+                                isExpanded = false
+                            }
+                        )
+                    }
+                }
+            }
+        }
+    )
 }

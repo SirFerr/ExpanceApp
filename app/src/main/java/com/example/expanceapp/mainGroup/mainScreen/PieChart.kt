@@ -7,11 +7,11 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import com.example.expanceapp.data.remote.Expanse
-import com.example.expanceapp.utils.ExpanseType
 
 data class PieChartData(
     val value: Float,
-    val color: Color
+    val color: Color,
+    val name: String
 )
 
 @Composable
@@ -35,16 +35,5 @@ fun PieChart(
             )
             startAngle += sweepAngle
         }
-    }
-}
-
-fun mapExpanseToPieChartData(expanses: List<Expanse>): List<PieChartData> {
-    return expanses.map { expanse ->
-        val expanseType = ExpanseType.fromDisplayName(expanse.type)
-        PieChartData(
-            value = expanse.value.toFloat(),
-            color = expanseType?.color
-                ?: Color.Black
-        )
     }
 }

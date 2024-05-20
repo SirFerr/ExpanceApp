@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">RecipeFeed</string>
+    <string name="app_name">ExpanseApp</string>
     <string name="home_title">Home</string>
     <string name="search_title">Search</string>
     <string name="favorite_title">Favorite</string>
@@ -15,6 +15,9 @@
     <string name="password_not_compared">Password not compared!</string>
 
     <string name="complete">Complete</string>
+    <string name="confirm">Confirm</string>
+    <string name="dismiss">Dismiss</string>
+
 
     <string name="refresh">Refresh</string>
     <string name="network_error">Network error</string>

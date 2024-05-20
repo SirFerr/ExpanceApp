@@ -1,4 +1,4 @@
-package com.example.expanceapp.mainGroup.searchScreen
+package com.example.expanceapp.mainGroup
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -25,23 +25,24 @@ fun ListItem(expanse: Expanse = Expanse()) {
             .padding(dimensionResource(id = R.dimen.main_padding))
     ) {
 
-            Column(
-                Modifier
-                    .fillMaxWidth()
-                    .padding(dimensionResource(id = R.dimen.main_padding))) {
-                Text(text = expanse.value.toString())
+        Column(
+            Modifier
+                .fillMaxWidth()
+                .padding(dimensionResource(id = R.dimen.main_padding))
+        ) {
+            Text(text = expanse.value.toString())
 
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically
-                ){
-                    Text(text = expanse.name)
-                    Text(text = expanse.type)
-                }
-
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(text = expanse.name)
+                Text(text = expanse.type)
             }
+
+        }
 
     }
 }
