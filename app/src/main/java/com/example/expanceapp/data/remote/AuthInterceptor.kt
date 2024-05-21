@@ -1,9 +1,10 @@
-package com.example.expanceapp.di
+package com.example.expanceapp.data.remote
 
 import android.util.Log
 import com.example.expanceapp.data.local.TokenSharedPreferencesManager
 import okhttp3.Interceptor
 import okhttp3.Response
+
 
 class AuthInterceptor(private val tokenSharedPreferencesManager: TokenSharedPreferencesManager) :
     Interceptor {

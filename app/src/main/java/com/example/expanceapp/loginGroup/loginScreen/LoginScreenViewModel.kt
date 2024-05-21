@@ -10,6 +10,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
@@ -26,7 +27,7 @@ class LoginScreenViewModel @Inject constructor(
         token.value = tokenSharedPreferencesManager.getToken()
     }
 
-    fun signIn() {
+    fun signIn(isSuccess: () -> Unit, isError: () -> Unit) {
         CoroutineScope(Dispatchers.IO).launch {
             try {
                 val response = expanseAppApi.signIn(
@@ -36,25 +37,37 @@ class LoginScreenViewModel @Inject constructor(
                         textPassword.value,
                     )
                 )
-                isSuccessful.value = response.isSuccessful
+
                 if (response.isSuccessful) {
                     response.body()?.let {
-                        val receivedToken = it.token.trim()
-                        Log.d("LoginScreenViewModel", "Received token: '$receivedToken'")
-                        token.value = receivedToken
-                        saveToken(receivedToken)
+                        if (it.error == "") {
+                            val receivedToken = it.token.trim()
+                            token.value = receivedToken
+                            tokenSharedPreferencesManager.saveToken(receivedToken)
+                            isSuccessful.value = true
+                            withContext(Dispatchers.Main) {
+                                isSuccess()
+                            }
+                        } else {
+                            isSuccessful.value = false
+                            withContext(Dispatchers.Main) {
+                                isError()
+                            }
+                        }
                     }
                 } else {
                     isSuccessful.value = false
+                    withContext(Dispatchers.Main) {
+                        isError()
+                    }
                 }
             } catch (e: Exception) {
-                Log.e("signIn", e.message.toString())
                 isSuccessful.value = false
+                withContext(Dispatchers.Main) {
+                    isError()
+                }
             }
         }
     }
 
-    private fun saveToken(token: String) {
-        tokenSharedPreferencesManager.saveToken(token)
-    }
 }

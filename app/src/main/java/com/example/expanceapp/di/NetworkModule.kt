@@ -1,6 +1,7 @@
 package com.example.expanceapp.di
 
 import com.example.expanceapp.data.local.TokenSharedPreferencesManager
+import com.example.expanceapp.data.remote.AuthInterceptor
 import com.example.expanceapp.data.remote.ExpanseAppApi
 import com.example.expanceapp.utils.Constants.BASE_URL
 import dagger.Module
