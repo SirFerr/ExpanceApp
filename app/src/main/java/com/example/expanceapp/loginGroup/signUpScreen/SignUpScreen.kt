@@ -73,6 +73,7 @@ fun SignUpScreen(
             Button(onClick = {
                 if (textPasswordAgain != "" && textPassword != "" && textUsername != "") {
                     if (textPasswordAgain == textPassword) {
+                        viewModel.signUp()
                         navController?.popBackStack()
 
 
