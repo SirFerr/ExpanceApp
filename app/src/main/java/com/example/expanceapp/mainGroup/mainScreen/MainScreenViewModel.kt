@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.expanceapp.data.remote.Expanse
 import com.example.expanceapp.data.remote.ExpanseAppApi
 import com.example.expanceapp.data.remote.MonthExpanse
+import com.example.expanceapp.mainGroup.generateColorFromType
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
@@ -101,35 +102,5 @@ class MainScreenViewModel @Inject constructor(
                 }
             }
         }
-    }
-
-    fun generateColorFromType(type: String): Color {
-        val hash = abs(type.hashCode())
-        val random = Random(hash.toLong())
-
-        // Генерируем значения оттенка, насыщенности и яркости
-        val hue = (random.nextInt(360) / 360.0f)
-        val saturation = 0.3f + (random.nextInt(40) / 100.0f) // от 0.3 до 0.7
-        val lightness = 0.4f + (random.nextInt(20) / 100.0f) // от 0.4 до 0.6
-
-        // Преобразование HSL в RGB
-        val c = (1 - abs(2 * lightness - 1)) * saturation
-        val x = c * (1 - abs((hue * 6) % 2 - 1))
-        val m = lightness - c / 2
-
-        val (r, g, b) = when {
-            hue < 1 / 6.0 -> Triple(c, x, 0f)
-            hue < 2 / 6.0 -> Triple(x, c, 0f)
-            hue < 3 / 6.0 -> Triple(0f, c, x)
-            hue < 4 / 6.0 -> Triple(0f, x, c)
-            hue < 5 / 6.0 -> Triple(x, 0f, c)
-            else -> Triple(c, 0f, x)
-        }
-
-        return Color(
-            red = r + m,
-            green = g + m,
-            blue = b + m
-        )
     }
 }

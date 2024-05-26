@@ -34,7 +34,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.expanceapp.R
-import com.example.expanceapp.mainGroup.ListItem
+import com.example.expanceapp.mainGroup.ExpanseItem
 
 @ExperimentalMaterial3Api
 @Composable
@@ -138,7 +138,7 @@ fun SearchScreen(
                         }
                     } else
                         items(expanses, key = { it.id }) {
-                            ListItem(it)
+                            ExpanseItem(it)
                         }
                 } else {
                     item {

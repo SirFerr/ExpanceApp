@@ -62,6 +62,8 @@ import androidx.navigation.NavHostController
 import com.example.expanceapp.R
 import com.example.expanceapp.data.remote.Expanse
 import com.example.expanceapp.data.remote.MonthExpanse
+import com.example.expanceapp.mainGroup.ExpanseItem
+import com.example.expanceapp.mainGroup.MonthExpanseHeader
 import com.example.expanceapp.utils.Destinations
 
 @OptIn(ExperimentalMaterialApi::class, ExperimentalFoundationApi::class)
@@ -115,7 +117,7 @@ fun MainScreen(
                     MonthExpanseHeader(monthExpanse)
                 }
                 items(monthExpanse.expanses) { expanse ->
-                    MonthExpanseItem(expanse, viewModel)
+                    ExpanseItem(expanse)
                 }
             }
         }
@@ -130,62 +132,6 @@ fun MainScreen(
     }
 }
 
-
-@Composable
-private fun MonthExpanseHeader(monthExpanse: MonthExpanse) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .background(MaterialTheme.colorScheme.background)
-            .padding(vertical = dimensionResource(id = R.dimen.main_padding)),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.SpaceBetween
-    ) {
-        Text(
-            text = monthExpanse.monthName,
-            style = MaterialTheme.typography.titleLarge
-        )
-        Spacer(modifier = Modifier.width(dimensionResource(id = R.dimen.main_padding)))
-        HorizontalDivider(
-            modifier = Modifier.weight(1f)
-        )
-        Spacer(modifier = Modifier.width(dimensionResource(id = R.dimen.main_padding)))
-        Text(
-            text = monthExpanse.monthSum.toString() + " Рублей",
-            style = MaterialTheme.typography.titleMedium
-        )
-    }
-}
-
-@Composable
-private fun MonthExpanseItem(
-    expanse: Expanse,
-    viewModel: MainScreenViewModel
-) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = dimensionResource(id = R.dimen.main_padding) * 2),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.SpaceBetween
-    ) {
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.main_padding))
-        ) {
-            Box(
-                modifier = Modifier
-                    .size(14.dp)
-                    .background(
-                        color = viewModel.generateColorFromType(expanse.type),
-                        shape = CircleShape
-                    )
-            )
-            Text(text = expanse.name)
-        }
-        Text(text = "${expanse.value} рублей")
-    }
-}
 
 @Composable
 fun PieChartSection(

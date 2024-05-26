@@ -20,7 +20,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.expanceapp.R
-import com.example.expanceapp.mainGroup.ListItem
+import com.example.expanceapp.mainGroup.ExpanseItem
 import com.example.expanceapp.mainGroup.searchScreen.CircularLoad
 import com.example.expanceapp.mainGroup.searchScreen.ErrorNetworkCard
 
@@ -67,7 +67,7 @@ fun DetailTypes(viewModel: DetailTypesViewModel = hiltViewModel(), type: String)
                         }
                     } else
                         items(expanses, key = { it.id }) {
-                            ListItem(it)
+                            ExpanseItem(it)
                         }
                 } else {
                     item {
