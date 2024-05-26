@@ -37,7 +37,6 @@ class LoginScreenViewModel @Inject constructor(
                         textPassword.value,
                     )
                 )
-
                 if (response.isSuccessful) {
                     response.body()?.let {
                         if (it.error == "") {
@@ -50,6 +49,7 @@ class LoginScreenViewModel @Inject constructor(
                             }
                         } else {
                             isSuccessful.value = false
+                            Log.e("signIn", it.error)
                             withContext(Dispatchers.Main) {
                                 isError()
                             }
@@ -62,6 +62,7 @@ class LoginScreenViewModel @Inject constructor(
                     }
                 }
             } catch (e: Exception) {
+                Log.e("error", e.message.toString())
                 isSuccessful.value = false
                 withContext(Dispatchers.Main) {
                     isError()

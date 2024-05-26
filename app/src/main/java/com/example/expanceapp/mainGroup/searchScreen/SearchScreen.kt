@@ -55,6 +55,7 @@ fun SearchScreen(
         animationSpec = tween(durationMillis = 300), label = ""
     )
     Column(
+        modifier = Modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         SearchBar(

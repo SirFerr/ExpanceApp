@@ -72,7 +72,7 @@ class MainScreenViewModel @Inject constructor(
         }
     }
 
-    private fun generateColorFromType(type: String): Color {
+    fun generateColorFromType(type: String): Color {
         val hash = type.hashCode()
         val r = (hash shr 16 and 0xFF) / 255.0f
         val g = (hash shr 8 and 0xFF) / 255.0f

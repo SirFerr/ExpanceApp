@@ -32,7 +32,6 @@ fun LogInScreen(
     viewModel: LoginScreenViewModel = hiltViewModel(),
 ) {
     val token by viewModel.token.collectAsState()
-    val isSuccessful by viewModel.isSuccessful.collectAsState()
 
     val context = LocalContext.current
 
@@ -88,7 +87,6 @@ fun LogInScreen(
 
             }) {
                 Text(text = stringResource(id = R.string.signup))
-
             }
 
 
