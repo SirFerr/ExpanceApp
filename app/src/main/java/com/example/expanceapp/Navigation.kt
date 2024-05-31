@@ -20,14 +20,17 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import androidx.navigation.navigation
+import com.example.expanceapp.data.remote.Expanse
 import com.example.expanceapp.loginGroup.loginScreen.LogInScreen
 import com.example.expanceapp.loginGroup.signUpScreen.SignUpScreen
 import com.example.expanceapp.mainGroup.accountScreen.AccountScreen
+import com.example.expanceapp.mainGroup.detailExpanse.DetailExpanse
 import com.example.expanceapp.mainGroup.detailTypes.DetailTypes
 import com.example.expanceapp.mainGroup.mainScreen.MainScreen
 import com.example.expanceapp.mainGroup.searchScreen.SearchScreen
 import com.example.expanceapp.scaffold.scaffold
 import com.example.expanceapp.utils.Destinations
+import com.google.gson.Gson
 
 @Composable
 fun Navigation(): NavHostController {
@@ -78,9 +81,20 @@ fun Navigation(): NavHostController {
                     ) { backStackEntry ->
                         val type = backStackEntry.arguments?.getString("type")
                         if (type != null) {
-                            DetailTypes(type = type)
+                            DetailTypes(type = type, navController = navController)
                         }
 
+                    }
+
+                    composable(
+                        Destinations.detailExpnace + "/{expanse}",
+                        arguments = listOf(navArgument("expanse") {
+                            type = NavType.StringType
+                        })
+                    ) { backStackEntry ->
+                        val expanseJson = backStackEntry.arguments?.getString("expanse")
+                        val expanse = Gson().fromJson(expanseJson, Expanse::class.java)
+                        DetailExpanse(navController, expanse)
                     }
                 }
             }

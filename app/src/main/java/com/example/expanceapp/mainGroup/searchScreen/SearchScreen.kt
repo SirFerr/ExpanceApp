@@ -138,7 +138,7 @@ fun SearchScreen(
                         }
                     } else
                         items(expanses, key = { it.id }) {
-                            ExpanseItem(it)
+                            ExpanseItem(it, navController)
                         }
                 } else {
                     item {

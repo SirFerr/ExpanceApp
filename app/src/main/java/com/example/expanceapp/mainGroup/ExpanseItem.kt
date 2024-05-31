@@ -1,6 +1,7 @@
 package com.example.expanceapp.mainGroup
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
@@ -19,21 +20,26 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
 import com.example.expanceapp.R
 import com.example.expanceapp.data.remote.Expanse
 import com.example.expanceapp.data.remote.MonthExpanse
+import com.google.gson.Gson
 import kotlin.math.abs
 import kotlin.random.Random
 
 
 @Composable
 fun ExpanseItem(
-    expanse: Expanse,
+    expanse: Expanse, navController: NavHostController
 ) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = dimensionResource(id = R.dimen.main_padding) * 2),
+            .padding(horizontal = dimensionResource(id = R.dimen.main_padding) * 2)
+            .clickable {
+                navController.navigate("detailExpanse/${Gson().toJson(expanse)}")
+            },
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween
     ) {

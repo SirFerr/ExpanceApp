@@ -117,7 +117,7 @@ fun MainScreen(
                     MonthExpanseHeader(monthExpanse)
                 }
                 items(monthExpanse.expanses) { expanse ->
-                    ExpanseItem(expanse)
+                    ExpanseItem(expanse, navController)
                 }
             }
         }

@@ -17,4 +17,5 @@ object Destinations {
     const val search = "search"
     const val account = "account"
     const val detailExpansesByType = "detailExpansesByType"
+    const val detailExpnace = "detailExpanse"
 }

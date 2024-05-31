@@ -1,6 +1,5 @@
 package com.example.expanceapp.mainGroup.mainScreen
 
-import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.expanceapp.data.remote.Expanse
@@ -12,7 +11,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import java.time.Month
 import javax.inject.Inject
-import kotlin.math.abs
 import kotlin.random.Random
 
 @HiltViewModel
@@ -65,7 +63,7 @@ class MainScreenViewModel @Inject constructor(
     fun generateRandomMonthExpanse(): MonthExpanse {
 
         val month = Month.entries.toTypedArray().random().name
-        val numberOfExpanses = Random.nextInt(5, 15)
+        val numberOfExpanses = Random.nextInt(1, 10)
         val expanses = List(numberOfExpanses) {
             val id = it
             val name = "Expanse $id"
